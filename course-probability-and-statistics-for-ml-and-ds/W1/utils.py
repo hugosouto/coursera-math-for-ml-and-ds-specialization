@@ -400,15 +400,32 @@ class monty_hall_game:
         self.results_ax.set_title(
             f"Games finished: {self.games_finished}\nGames you switched: {self.memory_games['switch']}, Games you stayed: {self.memory_games['stay']}"
         )
+        # Original code with zero division error
+            # self.results_ax.scatter(
+            #     ["switch", "stay"],
+            #     [
+            #         self.memory_wins["switch"] / self.memory_games['switch'],
+            #         self.memory_wins["stay"] / self.memory_games['stay'],
+            #     ],
+            #     s=350,
+            # )
+        
+        # Start of fixed code
+        switch_games = self.memory_games['switch']
+        switch_ratio = self.memory_wins["switch"] / switch_games if switch_games != 0 else 0
+        stay_games = self.memory_games['stay']
+        stay_ratio = self.memory_wins["stay"] / stay_games if stay_games != 0 else 0
+
         self.results_ax.scatter(
             ["switch", "stay"],
             [
-                self.memory_wins["switch"] / self.memory_games['switch'],
-                self.memory_wins["stay"] / self.memory_games['stay'],
+                switch_ratio,
+                stay_ratio,
             ],
             s=350,
         )
         self.results_ax.set_ylim(0, 1)
+        # End of Fixed code
 
     def check_if_switch(self):
         self.switch = False if self.choice == self.final_choice else True
